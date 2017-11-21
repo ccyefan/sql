@@ -1,5 +1,5 @@
--- B ²»ÔÚ A ÀïÃæµÄ¼ÇÂ¼ 
-select a from 
+ï»¿-- B ä¸åœ¨ A é‡Œé¢çš„è®°å½•
+select a from
   (select A.tel a ,B.tel b
   from A
   left outer join B
