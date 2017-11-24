@@ -6,23 +6,27 @@ select a from
   on A.tel = B.tel)
 where b is null;
 
-select tel from A  
- where A.tel not in 
+select tel from A
+ where A.tel not in
     (select B.tel from B)
-
+    
+-- 关联查询(结果集是笛卡儿积)
+select      *      from A,B
 -- 交集
 select      *      from A,B where A.tel = B.tel;
 select A.tel,B.tel from A,B where A.tel = B.tel;
--- 自联结
+--  关联写法
+select      *      from A join B on A.tel = B.tel;
+--  内联结
 insert into D select * from C;
 
--- 使用和付费且付费 (?  需要加 ucnt > 0 and pcnt>0) 
+-- 使用和付费且付费 (?  需要加 ucnt > 0 and pcnt>0)
 select      *      from C,D where C.tel = D.tel;
--- tel 唯一故加一个条件结果一直 
-select      *      from C,D where C.tel = D.tel and C.city = D.city; 
+-- tel 唯一故加一个条件结果一直
+select      *      from C,D where C.tel = D.tel and C.city = D.city;
 -- 使用次数，付费次数
 select  C.prov,C.city,C.tel,C.ucnt,D.pcnt from C,D where C.tel = D.tel;
---  全国 使用，付费人数   count(C.tel) 或 count(*)  
+--  全国 使用，付费人数   count(C.tel) 或 count(*)
 select  count(C.tel) from C,D where C.tel = D.tel;
 --  省 使用，付费人数 count(*) count(s.tel)
 select s.prov , count(s.tel)
@@ -32,7 +36,7 @@ group by s.prov;
       select C.prov,count(*) from C,D where C.tel = D.tel group by C.prov ;
 -- 全国使用次数,付费次数
 select  sum(C.ucnt),sum(D.pcnt) from C,D where C.tel = D.tel;
--- 地市 全国不同省地市编码 一样吗   
+-- 地市 全国不同省地市编码 一样吗
 -- 省 使用,付费次数
 select s.prov , sum(ucnt),sum(pcnt)
 from (select  C.prov,C.city,C.tel,C.ucnt,D.pcnt from C,D where C.tel = D.tel) s
@@ -42,12 +46,12 @@ group by s.prov;
 
 --  1,    2,  3,  5
     省   省   省  省
-    
+
     5
-    市 
-    
----  除法 
-select  C.prov,C.city,C.tel,C.ucnt,D.pcnt ,C.ucnt/D.pcnt from C,D where C.tel = D.tel 
+    市
+
+---  除法
+select  C.prov,C.city,C.tel,C.ucnt,D.pcnt ,C.ucnt/D.pcnt from C,D where C.tel = D.tel
 ---  省 除法
 --   select  C.prov,C.city,C.tel,C.ucnt,D.pcnt ,C.ucnt/D.pcnt from C,D where C.tel = D.tel group by C.prov
 ---  先要处理 省数据 再  运算 省 指标 付费次数/使用次数
